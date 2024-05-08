@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.nycschools.data.model.SchoolAPIResponse
 import com.example.nycschools.data.model.SchoolItem
 import com.example.nycschools.data.repository.SchoolRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +27,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getSchoolItems() {
         schoolRepository.getSchoolItems()
-            .subscribe(object : Observer<SchoolAPIResponse> {
+            .subscribe(object : Observer<List<SchoolItem>> {
                 override fun onSubscribe(d: Disposable) {
                     Log.d("LOGGER onSubscribe", "onSubscribe of loadInitial")
                 }
@@ -41,9 +40,9 @@ class HomeViewModel @Inject constructor(
                     Log.d("LOGGER onComplete", "onComplete of loadInitial")
                 }
 
-                override fun onNext(schoolAPIResponse: SchoolAPIResponse) {
-                    Log.d("LOGGER onNext", "onNext of loadInitial - " + schoolAPIResponse.schoolItem.first().schoolName)
-                    schoolItemsList.value = schoolAPIResponse.schoolItem
+                override fun onNext(schoolItemList: List<SchoolItem>) {
+                    Log.d("LOGGER onNext", "onNext of loadInitial - " + schoolItemList.first().schoolName)
+                    schoolItemsList.value = schoolItemList
                 }
             })
     }

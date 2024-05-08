@@ -1,7 +1,7 @@
 package com.example.nycschools.data.repository
 
-import com.example.nycschools.data.model.SATAPIResponse
-import com.example.nycschools.data.model.SchoolAPIResponse
+import com.example.nycschools.data.model.SATItem
+import com.example.nycschools.data.model.SchoolItem
 import io.reactivex.Observable
 
 /**
@@ -13,12 +13,12 @@ interface SchoolRepository {
      *
      * @return Observable<SchoolAPIResponse>
      * */
-    fun getSchoolItems(): Observable<SchoolAPIResponse>
+    fun getSchoolItems(): Observable<List<SchoolItem>>
 
     /**
      * getSATItems - Get SAT Items from server
      *
      * @return Observable<SATAPIResponse>
      * */
-    fun getSATItems(): Observable<SATAPIResponse>
+    fun getSATItems(): Observable<List<SATItem>>
 }

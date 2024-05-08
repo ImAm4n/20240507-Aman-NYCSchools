@@ -1,7 +1,7 @@
 package com.example.nycschools.data.repository
 
-import com.example.nycschools.data.model.SATAPIResponse
-import com.example.nycschools.data.model.SchoolAPIResponse
+import com.example.nycschools.data.model.SATItem
+import com.example.nycschools.data.model.SchoolItem
 import com.example.nycschools.data.remote.ApiService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +19,7 @@ class SchoolRepositoryImpl @Inject constructor(private var apiService: ApiServic
      *
      * @return Observable<SchoolAPIResponse>
      * */
-    override fun getSchoolItems(): Observable<SchoolAPIResponse> {
+    override fun getSchoolItems(): Observable<List<SchoolItem>> {
         return apiService
             .getSchoolItems()
             .subscribeOn(Schedulers.io()) // Subscribe on IO thread
@@ -31,7 +31,7 @@ class SchoolRepositoryImpl @Inject constructor(private var apiService: ApiServic
      *
      * @return Observable<SATAPIResponse>
      * */
-    override fun getSATItems(): Observable<SATAPIResponse> {
+    override fun getSATItems(): Observable<List<SATItem>> {
         return apiService
             .getSATItems()
             .subscribeOn(Schedulers.io()) // Subscribe on IO thread

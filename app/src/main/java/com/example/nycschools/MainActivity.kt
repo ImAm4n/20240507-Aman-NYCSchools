@@ -4,24 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.nycschools.presentation.view.home.HomeScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.nycschools.data.model.SATItem
+import com.example.nycschools.presentation.view.AppNavHost
+import com.example.nycschools.presentation.view.common.CircularLoader
+import com.example.nycschools.presentation.view.common.ErrorScreen
+import com.example.nycschools.presentation.viewmodel.DetailViewModel
 import com.example.nycschools.presentation.viewmodel.HomeViewModel
 import com.example.nycschools.ui.theme.NycSchoolsTheme
+import com.example.nycschools.util.ApiCallStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -30,51 +26,61 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    /** HomeViewModel instance */
     private val homeViewModel: HomeViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    /** DetailViewModel instance */
+    private val detailViewModel: DetailViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        detailViewModel.getSATItems()
         setContent {
             NycSchoolsTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        text = "NYC School",
-                                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                                        fontStyle = MaterialTheme.typography.titleMedium.fontStyle,
-                                        fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = {}) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Home,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        contentDescription = "Home"
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            )
-                        )
-                    }
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    HomeScreen(
-                        modifier = Modifier.padding(it),
-                        homeViewModel = homeViewModel,
-                    )
+                    when (val satItemListStatus = detailViewModel.satItemsList.value) {
+                        is ApiCallStatus.Success -> {
+                            initViews(satItemListStatus.data)
+                            AppNavHost(
+                                navController = rememberNavController(),
+                                homeViewModel = homeViewModel,
+                                satItems = satItemListStatus.data,
+                            )
+                        }
+                        is ApiCallStatus.Error -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                ErrorScreen {
+                                    detailViewModel.getSATItems()
+                                }
+                            }
+                        }
+                        is ApiCallStatus.Loading -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularLoader()
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * function to initialize the views
+     *
+     * @param satItems - list of [SATItem]
+     * */
+    private fun initViews(
+        satItems: List<SATItem>,
+    ) {
+        homeViewModel.getSchoolItems(satItems = satItems)
     }
 }

@@ -13,27 +13,32 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.nycschools.presentation.view.common.TitleAndSubtitleRow
+import com.example.nycschools.util.NavigationItem
 
 /**
  * SchoolCardView - contains the details of respective school
  *
  * @param modifier - Modifier
- * @param schoolName
- * @param email
- * @param website
- * @param phone
- * @param city
- * @param state
- * @param zip
+ * @param navController - NavController
+ * @param schoolName - String
+ * @param email - String
+ * @param website - String
+ * @param phone - String
+ * @param city - String
+ * @param state - String
+ * @param zip - String
+ * @param uniqueSchoolNumber - String
  * */
 @Composable
 fun SchoolCardView(
     modifier: Modifier = Modifier,
+    navController: NavController,
     schoolName: String,
     email: String,
     website: String,
@@ -41,13 +46,16 @@ fun SchoolCardView(
     city: String,
     state: String,
     zip: String,
+    uniqueSchoolNumber: String,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(bottom = 4.dp)
-            .clickable {},
+            .clickable {
+               navController.navigate(NavigationItem.Detail.withArgs(uniqueSchoolNumber))
+            },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
         ),
@@ -89,30 +97,5 @@ fun SchoolCardView(
                 subTitle = zip,
             )
         }
-    }
-}
-
-/**
- * Title and Subtitle Row composable
- *
- * @param title - The title of the row
- * @param subTitle - The subtitle of the row
- * */
-@Composable
-fun TitleAndSubtitleRow(
-    title: String,
-    subTitle: String,
-) {
-    Row(
-        modifier = Modifier.padding(4.dp),
-    ) {
-        Text(
-            text = title,
-            fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
-        )
-        Text(
-            text = subTitle,
-            fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
-        )
     }
 }

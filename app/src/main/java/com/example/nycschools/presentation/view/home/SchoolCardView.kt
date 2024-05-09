@@ -1,13 +1,14 @@
-package com.example.nycschools.presentation.view
+package com.example.nycschools.presentation.view.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,7 +44,8 @@ fun SchoolCardView(
 ) {
     Card(
         modifier = modifier
-            .wrapContentSize()
+            .fillMaxWidth()
+            .wrapContentHeight()
             .padding(bottom = 4.dp)
             .clickable {},
         elevation = CardDefaults.cardElevation(
@@ -54,19 +56,19 @@ fun SchoolCardView(
     ) {
         TitleAndSubtitleRow(
             title = "School Name: ",
-            subTitle = "Clinton School Writers & Artists, M.S. 260",
+            subTitle = schoolName,
         )
         TitleAndSubtitleRow(
             title = "Email: ",
-            subTitle = "admissions@theclintonschool.net",
+            subTitle = email,
         )
         TitleAndSubtitleRow(
             title = "Website: ",
-            subTitle = "www.theclintonschool.net",
+            subTitle = website,
         )
         TitleAndSubtitleRow(
             title = "Phone #: ",
-            subTitle = "212-524-4360",
+            subTitle = phone,
         )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -74,17 +76,17 @@ fun SchoolCardView(
         ) {
             TitleAndSubtitleRow(
                 title = "City: ",
-                subTitle = "Manhattan",
+                subTitle = city,
             )
             Spacer(modifier = Modifier.width(4.dp))
             TitleAndSubtitleRow(
                 title = "State: ",
-                subTitle = "NY",
+                subTitle = state,
             )
             Spacer(modifier = Modifier.width(4.dp))
             TitleAndSubtitleRow(
                 title = "Zip: ",
-                subTitle = "10003",
+                subTitle = zip,
             )
         }
     }

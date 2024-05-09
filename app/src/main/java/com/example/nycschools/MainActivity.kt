@@ -19,7 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Modifier
-import com.example.nycschools.presentation.view.HomeScreen
+import com.example.nycschools.presentation.view.home.HomeScreen
 import com.example.nycschools.presentation.viewmodel.HomeViewModel
 import com.example.nycschools.ui.theme.NycSchoolsTheme
 import dagger.hilt.android.AndroidEntryPoint

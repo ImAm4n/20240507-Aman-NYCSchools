@@ -1,6 +1,8 @@
 package com.example.nycschools.data.remote
 
 import com.example.nycschools.util.APIConstants
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 /**
  * NetworkModule - Module for providing network dependencies
@@ -26,12 +29,18 @@ object NetworkModule {
         return retrofit.create(ApiService::class.java)
     }
 
+    /** Gson object */
+    private var gson: Gson = GsonBuilder()
+        .setLenient()
+        .excludeFieldsWithoutExposeAnnotation() // configure Gson instance to ignore unknown fields
+        .create()
+
     @Provides
     @Singleton
     fun getRetrofit(okHttpClient: OkHttpClient?): Retrofit {
         return Retrofit.Builder()
             .baseUrl(APIConstants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(okHttpClient!!)
             .build()

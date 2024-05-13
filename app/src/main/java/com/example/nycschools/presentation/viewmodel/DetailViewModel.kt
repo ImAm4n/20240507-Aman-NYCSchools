@@ -1,6 +1,5 @@
 package com.example.nycschools.presentation.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -29,21 +28,21 @@ class DetailViewModel @Inject constructor(
         schoolRepository.getSATItems()
             .subscribe(object : Observer<List<SATItem>> {
                 override fun onSubscribe(d: Disposable) {
-                    Log.d("LOGGER onSubscribe", "onSubscribe of loadInitial")
+                    // Log.d("LOGGER onSubscribe", "onSubscribe of loadInitial")
                     satItemsList.value = ApiCallStatus.Loading
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.d("LOGGER onError", "onError of loadInitial - " + e.message)
+                    // Log.d("LOGGER onError", "onError of loadInitial - " + e.message)
                     satItemsList.value = ApiCallStatus.Error(e)
                 }
 
                 override fun onComplete() {
-                    Log.d("LOGGER onComplete", "onComplete of loadInitial")
+                    // Log.d("LOGGER onComplete", "onComplete of loadInitial")
                 }
 
                 override fun onNext(satItemList: List<SATItem>) {
-                    Log.d("LOGGER onNext", "onNext of loadInitial - " + satItemList.first().schoolName)
+                    // Log.d("LOGGER onNext", "onNext of loadInitial - " + satItemList.first().schoolName)
                     satItemsList.value = ApiCallStatus.Success(satItemList)
                 }
             })

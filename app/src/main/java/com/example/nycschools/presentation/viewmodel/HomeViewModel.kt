@@ -1,6 +1,5 @@
 package com.example.nycschools.presentation.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -34,13 +33,13 @@ class HomeViewModel @Inject constructor(
     ) {
         schoolRepository.getSchoolItems()
             .subscribe(object : Observer<List<SchoolItem>> {
-                override fun onSubscribe(d: Disposable) {
-                    Log.d("LOGGER onSubscribe", "onSubscribe of loadInitial")
+                override fun onSubscribe(disposable: Disposable) {
+                    // Log.d("LOGGER onSubscribe", "onSubscribe of loadInitial")
                     schoolItemsList.value = ApiCallStatus.Loading
                 }
 
                 override fun onNext(schoolItemList: List<SchoolItem>) {
-                    Log.d("LOGGER onNext", "onNext of loadInitial - " + schoolItemList.first().schoolName)
+                    // Log.d("LOGGER onNext", "onNext of loadInitial - " + schoolItemList.first().schoolName)
                     val filteredSchoolItemList = UseCase().filterSchoolItems(
                         schoolItems = schoolItemList,
                         satItems = satItems,
@@ -49,12 +48,12 @@ class HomeViewModel @Inject constructor(
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.d("LOGGER onError", "onError of loadInitial - " + e.message)
+                    // Log.d("LOGGER onError", "onError of loadInitial - " + e.message)
                     schoolItemsList.value = ApiCallStatus.Error(e)
                 }
 
                 override fun onComplete() {
-                    Log.d("LOGGER onComplete", "onComplete of loadInitial")
+                    // Log.d("LOGGER onComplete", "onComplete of loadInitial")
                 }
             })
     }

@@ -59,7 +59,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun testGetSchoolItems() {
+    fun testGetSchoolItemsSuccess() {
         // Arrange
         val schoolItems = listOf(
             SchoolItem(
@@ -111,6 +111,28 @@ class HomeViewModelTest {
                 "New York School"
             ),
         )
+        val filteredSchoolItems = listOf(
+            SchoolItem(
+                "BNG",
+                "12345",
+                "00000",
+                "123 Main St",
+                "New York School",
+                "NY",
+                "abc.com",
+                zip = null,
+            ),
+            SchoolItem(
+                "BGP",
+                "23456",
+                "11111",
+                "123 Main St",
+                "New York School",
+                "NY",
+                "xyz.com",
+                zip = null,
+            ),
+        )
         Mockito.`when`(schoolRepository.getSchoolItems()).thenReturn(Observable.just(schoolItems))
 
         // Act
@@ -119,7 +141,21 @@ class HomeViewModelTest {
 
         // Assert
         assert(homeViewModel.schoolItemsList.value is ApiCallStatus.Success)
-        assert((homeViewModel.schoolItemsList.value as ApiCallStatus.Success).data == schoolItems)
+        assert((homeViewModel.schoolItemsList.value as ApiCallStatus.Success).data == filteredSchoolItems)
+    }
+
+    @Test
+    fun testGetSchoolItemsError() {
+        // Arrange
+        Mockito.`when`(schoolRepository.getSchoolItems()).thenReturn(Observable.error(Exception("Error")))
+
+        // Act
+        homeViewModel.getSchoolItems(listOf())
+        testScheduler.triggerActions()  // Trigger emissions
+
+        // Assert
+        assert(homeViewModel.schoolItemsList.value is ApiCallStatus.Error)
+        assert((homeViewModel.schoolItemsList.value as ApiCallStatus.Error).exception.message == "Error")
     }
 
     @After

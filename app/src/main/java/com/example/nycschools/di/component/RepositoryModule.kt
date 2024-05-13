@@ -24,9 +24,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesSchoolRepositoryImpl(
-        apiService: ApiService
+        apiService: ApiService,
     ): SchoolRepository =
         SchoolRepositoryImpl(
-            apiService
+            apiService,
         )
 }

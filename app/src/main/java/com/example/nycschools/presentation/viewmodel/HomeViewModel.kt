@@ -39,15 +39,6 @@ class HomeViewModel @Inject constructor(
                     schoolItemsList.value = ApiCallStatus.Loading
                 }
 
-                override fun onError(e: Throwable) {
-                    Log.d("LOGGER onError", "onError of loadInitial - " + e.message)
-                    schoolItemsList.value = ApiCallStatus.Error(e)
-                }
-
-                override fun onComplete() {
-                    Log.d("LOGGER onComplete", "onComplete of loadInitial")
-                }
-
                 override fun onNext(schoolItemList: List<SchoolItem>) {
                     Log.d("LOGGER onNext", "onNext of loadInitial - " + schoolItemList.first().schoolName)
                     val filteredSchoolItemList = UseCase().filterSchoolItems(
@@ -55,6 +46,15 @@ class HomeViewModel @Inject constructor(
                         satItems = satItems,
                     )
                     schoolItemsList.value = ApiCallStatus.Success(filteredSchoolItemList)
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.d("LOGGER onError", "onError of loadInitial - " + e.message)
+                    schoolItemsList.value = ApiCallStatus.Error(e)
+                }
+
+                override fun onComplete() {
+                    Log.d("LOGGER onComplete", "onComplete of loadInitial")
                 }
             })
     }

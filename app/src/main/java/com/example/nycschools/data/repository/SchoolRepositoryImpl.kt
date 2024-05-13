@@ -3,9 +3,9 @@ package com.example.nycschools.data.repository
 import com.example.nycschools.data.model.SATItem
 import com.example.nycschools.data.model.SchoolItem
 import com.example.nycschools.data.remote.ApiService
+import com.example.nycschools.util.AppSchedulerProvider
+import com.example.nycschools.util.SchedulerProvider
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -13,7 +13,10 @@ import javax.inject.Inject
  *
  * @param apiService
  * */
-class SchoolRepositoryImpl @Inject constructor(private var apiService: ApiService) : SchoolRepository {
+class SchoolRepositoryImpl @Inject constructor(
+    private var apiService: ApiService,
+    private var schedulerProvider: SchedulerProvider = AppSchedulerProvider(),
+) : SchoolRepository {
     /**
      * getSchoolItems - Get School Items from server
      *
@@ -22,8 +25,8 @@ class SchoolRepositoryImpl @Inject constructor(private var apiService: ApiServic
     override fun getSchoolItems(): Observable<List<SchoolItem>> {
         return apiService
             .getSchoolItems()
-            .subscribeOn(Schedulers.io()) // Subscribe on IO thread
-            .observeOn(AndroidSchedulers.mainThread()) // Observe on UI thread
+            .subscribeOn(schedulerProvider.io()) // Subscribe on IO thread
+            .observeOn(schedulerProvider.ui()) // Observe on UI thread
     }
 
     /**
@@ -34,7 +37,7 @@ class SchoolRepositoryImpl @Inject constructor(private var apiService: ApiServic
     override fun getSATItems(): Observable<List<SATItem>> {
         return apiService
             .getSATItems()
-            .subscribeOn(Schedulers.io()) // Subscribe on IO thread
-            .observeOn(AndroidSchedulers.mainThread()) // Observe on UI thread
+            .subscribeOn(schedulerProvider.io()) // Subscribe on IO thread
+            .observeOn(schedulerProvider.ui()) // Observe on UI thread
     }
 }

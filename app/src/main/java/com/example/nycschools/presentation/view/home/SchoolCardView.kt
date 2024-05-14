@@ -91,11 +91,10 @@ fun SchoolCardView(
                 title = "State: ",
                 subTitle = state,
             )
-            Spacer(modifier = Modifier.width(4.dp))
-            TitleAndSubtitleRow(
-                title = "Zip: ",
-                subTitle = zip,
-            )
         }
+        TitleAndSubtitleRow(
+            title = "Zip: ",
+            subTitle = zip,
+        )
     }
 }
